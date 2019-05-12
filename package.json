@@ -27,16 +27,24 @@
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/schematics": "^6.2.0",
     "@schematics/angular": "^7.3.9",
+    "@types/express-winston": "^3.0.1",
     "@types/graphql": "^14.2.0",
+    "@types/winston": "^2.4.4",
+    "apollo-server": "^2.5.0",
     "apollo-server-express": "^2.5.0",
+    "express-winston": "^3.1.0",
     "global": "^4.3.2",
     "graphql": "^14.3.0",
     "linqts-camelcase": "^1.12.4",
     "mongoose": "^5.5.7",
+    "nest-winston": "^1.0.2",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3",
-    "type-graphql": "^0.17.3"
+    "ts-simple-nameof": "^1.1.0",
+    "tsconfig-paths": "^3.8.0",
+    "type-graphql": "^0.17.3",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",
@@ -51,7 +59,6 @@
     "supertest": "^3.4.1",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.7.0",
     "tslint": "5.12.1",
     "typescript": "^3.4.3"
   },

@@ -26,7 +26,29 @@
             "runtimeArgs": [
                 "--nolazy",
                 "-r",
-                "ts-node/register"
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "name": "debug current file",
+            "request": "launch",
+            "args": [
+                "${relativeFile}"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                //这里是在注册ts-node
+                "-r",
+                "ts-node/register",
+                //这里是在注册使用标准的tsconfig
+                "-r",
+                "tsconfig-paths/register"
             ],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",

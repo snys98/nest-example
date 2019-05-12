@@ -8,8 +8,19 @@
         "target": "es6",
         "sourceMap": true,
         "outDir": "./dist",
+        "baseUrl": ".",
+        "lib": [
+            "esnext",
+        ],
+        "paths": {
+            "@shared/*": [
+                "src/shared/*"
+            ]
+        }
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "dist",
+        "lib.dom.d.ts"
     ]
 }
