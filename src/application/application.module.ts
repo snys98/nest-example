@@ -20,10 +20,11 @@ const THIRD_DEPS = [PubSub];
             autoSchemaFile: 'schema.gql',
             installSubscriptionHandlers: true,
             playground: true,
+            context: ({ req, res }) => ({ req, res }),
         }),
         MongooseModule.forRoot('mongodb://root:snys19931103@localhost/db'),
         MongooseModule.forFeature(MODEL_SCHEMAS),
     ],
     providers: [...SERVICES, ...RESOLVERS, ...THIRD_DEPS],
 })
-export class ApplicationModule {}
+export class ApplicationModule { }

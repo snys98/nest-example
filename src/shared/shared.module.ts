@@ -1,9 +1,8 @@
 import { Module, Global } from '@nestjs/common';
-import "ts-nameof";
-import { LoggingInterceptor } from './logging.interceptor';
+// import { GraphQLLoggingInterceptor } from './logging.interceptor';
 
 @Global()
 @Module({
-    providers: [LoggingInterceptor]
+    providers: []
 })
 export class SharedModule { }
