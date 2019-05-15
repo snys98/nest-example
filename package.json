@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "ts-node-dev -r tsconfig-paths/register --respawn --no-deps --inspect-brk=9229 src/main.ts",
+    "start": "ts-node-dev -r tsconfig-paths/register --respawn --ignore-watch node_modules --debug --inspect-brk=9229 src/main.ts",
     "prestart:prod": "rimraf dist && npm run build",
     "start:prod": "node dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -34,6 +34,7 @@
     "express-winston": "^3.1.0",
     "global": "^4.3.2",
     "graphql": "^14.3.0",
+    "json5": "^2.1.0",
     "linqts-camelcase": "^1.12.4",
     "mongoose": "^5.5.7",
     "morgan": "^1.9.1",
@@ -44,6 +45,7 @@
     "ts-simple-nameof": "^1.1.0",
     "tsconfig-paths": "^3.8.0",
     "type-graphql": "^0.17.3",
+    "typescript-mix": "^3.1.3",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },

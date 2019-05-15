@@ -3,7 +3,11 @@
         "module": "commonjs",
         "declaration": true,
         "types": [
-            "node"
+            "node",
+            "jest"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
         ],
         "removeComments": true,
         "emitDecoratorMetadata": true,

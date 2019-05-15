@@ -1,20 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-// import { GraphQLLoggingInterceptor } from '@shared/logging.interceptor';
 import * as expressWinston from "express-winston";
-import winston = require('winston');
-import { LOGGER } from '@shared/morganston.logger';
+import { Request, Response, NextFunction } from 'express';
+import { LogService } from '@shared/logging/log.service';
+// import { ResponseLoggingInterceptor } from '@shared/logging.interceptor';
+
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    // const logger = app.get(GraphQLLoggingInterceptor);
+    const logger = app.get(LogService);
     app.use(expressWinston.logger({
-        winstonInstance: LOGGER,
+        winstonInstance: logger,
         requestWhitelist: [...expressWinston.requestWhitelist, "body"],
-        responseWhitelist: ["body"],
         meta: true, // optional: control whether you want to log the meta data about the request (default to true)
+        level: "info",
+        statusLevels: {
+            success: "info",
+            warn: "info",
+            error: "warn",
+        },
     }));
-    // app.useGlobalInterceptors(logger);
     await app.listen(3000);
 }
 bootstrap();
+

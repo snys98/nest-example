@@ -68,7 +68,7 @@ $ npm run test:cov
 - [ ] Angular Client
 - Logging
   - [x] AOP Logging
-  - [ ] Configurable Response Logging
+  - [x] Configurable Response Logging
   - [ ] Injected Logger
 - [ ] AOP Error Handling
 - [x] MongoDB Integration

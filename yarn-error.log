@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add winston-daily-rotate-file @types/winston-daily-rotate-file
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/jest-serializer
 
 PATH: 
   C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\Python27\;C:\Python27\Scripts;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_191\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Android\android-sdk\tools\bin;C:\Program Files\dotnet\;C:\Program Files\MacType;C:\Program Files\Microsoft VS Code\bin;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\nodejs\;C:\Program Files\TortoiseGit\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\lulus\scoop\shims;C:\Users\lulus\AppData\Local\Microsoft\WindowsApps;C:\tools\Cmder;C:\Users\lulus\AppData\Local\Programs\Fiddler;C:\Program Files\Bandizip\;C:\Users\lulus\AppData\Local\Yarn\bin;C:\Users\lulus\AppData\Roaming\npm;C:\Users\lulus\.dotnet\tools
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fwinston-daily-rotate-file: Not found
+  Error: https://registry.yarnpkg.com/@types%2fjest-serializer: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65003:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129018:22)
       at emitTwo (events.js:126:13)
@@ -36,9 +36,7 @@ npm manifest:
     "scripts": {
       "build": "tsc -p tsconfig.build.json",
       "format": "prettier --write \"src/**/*.ts\"",
-      "start": "ts-node-dev -r tsconfig-paths/register --inspect-brk=9229 src/main.ts",
-      "start:dev": "nodemon",
-      "start:debug": "nodemon --config nodemon-debug.json",
+      "start": "ts-node-dev -r tsconfig-paths/register --respawn --ignore-watch node_modules --debug --inspect-brk=9229 src/main.ts",
       "prestart:prod": "rimraf dist && npm run build",
       "start:prod": "node dist/main.js",
       "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -65,6 +63,7 @@ npm manifest:
       "express-winston": "^3.1.0",
       "global": "^4.3.2",
       "graphql": "^14.3.0",
+      "jest-serializer": "^24.4.0",
       "linqts-camelcase": "^1.12.4",
       "mongoose": "^5.5.7",
       "morgan": "^1.9.1",
@@ -75,7 +74,8 @@ npm manifest:
       "ts-simple-nameof": "^1.1.0",
       "tsconfig-paths": "^3.8.0",
       "type-graphql": "^0.17.3",
-      "winston": "^3.2.1"
+      "winston": "^3.2.1",
+      "winston-daily-rotate-file": "^3.9.0"
     },
     "devDependencies": {
       "@nestjs/testing": "^6.0.0",
@@ -1797,6 +1797,11 @@ Lockfile:
     dependencies:
       array-find-index "^1.0.1"
   
+  cycle@~1.0.3:
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
+    integrity sha1-IegLK+hYD5i0aPN5QwZisEbDStI=
+  
   d@1:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/d/-/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
@@ -2388,6 +2393,13 @@ Lockfile:
     version "2.3.3"
     resolved "https://registry.yarnpkg.com/fecha/-/fecha-2.3.3.tgz#948e74157df1a32fd1b12c3a3c3cdcb6ec9d96cd"
     integrity sha512-lUGBnIamTAwk4znq5BcqsDaxSmZ9nDVJaij6NvRt/Tg4R69gERA+otPKbS86ROw9nxVMw2/mp1fnaiWqbs6Sdg==
+  
+  file-stream-rotator@^0.4.1:
+    version "0.4.1"
+    resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.4.1.tgz#09f67b86d6ea589d20b7852c51c59de55d916d6d"
+    integrity sha512-W3aa3QJEc8BS2MmdVpQiYLKHj3ijpto1gMDlsgCRSKfIUe6MwkcpODGPQ3vZfb0XvCeCqlu9CBQTN7oQri2TZQ==
+    dependencies:
+      moment "^2.11.2"
   
   filename-regex@^2.0.0:
     version "2.0.1"
@@ -3684,6 +3696,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/jest-serializer/-/jest-serializer-23.0.1.tgz#a3776aeb311e90fe83fab9e533e85102bd164165"
     integrity sha1-o3dq6zEekP6D+rnlM+hRAr0WQWU=
   
+  jest-serializer@^24.4.0:
+    version "24.4.0"
+    resolved "https://registry.yarnpkg.com/jest-serializer/-/jest-serializer-24.4.0.tgz#f70c5918c8ea9235ccb1276d232e459080588db3"
+    integrity sha512-k//0DtglVstc1fv+GY/VHDIjrtNjdYvYjMlbLUed4kxrE92sIUewOi5Hj3vrpB8CXfkJntRPDRjCrCvUhBdL8Q==
+  
   jest-snapshot@^23.6.0:
     version "23.6.0"
     resolved "https://registry.yarnpkg.com/jest-snapshot/-/jest-snapshot-23.6.0.tgz#f9c2625d1b18acda01ec2d2b826c0ce58a5aa17a"
@@ -3975,6 +3992,17 @@ Lockfile:
     version "4.17.11"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
     integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+  
+  logform@^1.6.0:
+    version "1.10.0"
+    resolved "https://registry.yarnpkg.com/logform/-/logform-1.10.0.tgz#c9d5598714c92b546e23f4e78147c40f1e02012e"
+    integrity sha512-em5ojIhU18fIMOw/333mD+ZLE2fis0EzXl1ZwHx4iQzmpQi6odNiY/t+ITNr33JZhT9/KEaH+UPIipr6a9EjWg==
+    dependencies:
+      colors "^1.2.1"
+      fast-safe-stringify "^2.0.4"
+      fecha "^2.3.3"
+      ms "^2.1.1"
+      triple-beam "^1.2.0"
   
   logform@^2.1.1:
     version "2.1.2"
@@ -4281,6 +4309,11 @@ Lockfile:
     integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
     dependencies:
       minimist "0.0.8"
+  
+  moment@^2.11.2:
+    version "2.24.0"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+    integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
   
   mongodb-core@3.2.3:
     version "3.2.3"
@@ -4602,7 +4635,7 @@ Lockfile:
       define-property "^0.2.5"
       kind-of "^3.0.3"
   
-  object-hash@1.3.1:
+  object-hash@1.3.1, object-hash@^1.3.0:
     version "1.3.1"
     resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-1.3.1.tgz#fde452098a951cb145f039bb7d455449ddc126df"
     integrity sha512-OSuu/pU4ENM9kmREg0BdNrUDIl1heYa4mBZacJc+vVWz4GtAwu7jO8s4AIt2aGRUTqxykpWzI3Oqnsm13tTMDA==
@@ -5382,7 +5415,7 @@ Lockfile:
     dependencies:
       semver "^5.0.3"
   
-  "semver@2 || 3 || 4 || 5", semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.5, semver@^5.5.0:
+  "semver@2 || 3 || 4 || 5", semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.5, semver@^5.5.0, semver@^5.6.0:
     version "5.7.0"
     resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.0.tgz#790a7cf6fea5459bac96110b29b60412dc8ff96b"
     integrity sha512-Ya52jSX2u7QKghxeoFGpLwCtGlt7j0oY9DYb5apt9nPlJ42ID+ulTXESnt/qAQcoSERyZ5sl3LDIOw0nAn/5DA==
@@ -6426,7 +6459,28 @@ Lockfile:
     dependencies:
       string-width "^2.1.1"
   
-  winston-transport@^4.3.0:
+  winston-compat@^0.1.4:
+    version "0.1.4"
+    resolved "https://registry.yarnpkg.com/winston-compat/-/winston-compat-0.1.4.tgz#599b4ce807ffe728713ecc25ede3f6b89425b739"
+    integrity sha512-mMEfFsSm6GmkFF+f4/0UJtG4N1vSaczGmXLVJYmS/+u2zUaIPcw2ZRuwUg2TvVBjswgiraN+vNnAG8z4fRUZ4w==
+    dependencies:
+      cycle "~1.0.3"
+      logform "^1.6.0"
+      triple-beam "^1.2.0"
+  
+  winston-daily-rotate-file@^3.9.0:
+    version "3.9.0"
+    resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.9.0.tgz#2a9f4f327761b0c096c0649c275945148dd4b6f7"
+    integrity sha512-KicvoaLQapqjSDSCIUKik0dDb90vFkqx1/udUiAt6iOqAtBl2qBCrpSDNy3xp7WnT6xHCKAWEEp2XILtiN+zpQ==
+    dependencies:
+      file-stream-rotator "^0.4.1"
+      object-hash "^1.3.0"
+      semver "^5.6.0"
+      triple-beam "^1.3.0"
+      winston-compat "^0.1.4"
+      winston-transport "^4.2.0"
+  
+  winston-transport@^4.2.0, winston-transport@^4.3.0:
     version "4.3.0"
     resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.3.0.tgz#df68c0c202482c448d9b47313c07304c2d7c2c66"
     integrity sha512-B2wPuwUi3vhzn/51Uukcao4dIduEiPOcOt9HJ3QeaXgkJ5Z7UwpBzxS4ZGNHtrxrUvTwemsQiSys0ihOf8Mp1A==
