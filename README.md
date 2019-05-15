@@ -40,9 +40,6 @@ $ npm install
 # development
 $ npm run start
 
-# watch mode
-$ npm run start:dev
-
 # production mode
 $ npm run start:prod
 ```
@@ -59,6 +56,30 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Features & Todo
+
+- [ ] Environment specific config
+- GraphQL Server
+  - [x] Query
+  - [x] Mutation
+  - [x] Subscription
+  - [ ] Parameterized&Filtered Subscription
+- [ ] Angular Client
+- Logging
+  - [x] AOP Logging
+  - [ ] Configurable Response Logging
+  - [ ] Injected Logger
+- [ ] AOP Error Handling
+- [x] MongoDB Integration
+- Authentication
+  - [ ] Role Based Access Control
+  - [ ] Third Party Login
+- [ ] Email&SMS Sender
+- [ ] Payment
+- [ ] File Upload
+- [ ] Response Caching
+- [ ] Testing
 
 ## Support
 

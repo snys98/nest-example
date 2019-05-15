@@ -8,8 +8,6 @@
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --no-deps --inspect-brk=9229 src/main.ts",
-    "start:dev": "nodemon",
-    "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rimraf dist && npm run build",
     "start:prod": "node dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
