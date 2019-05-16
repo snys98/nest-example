@@ -6,10 +6,11 @@ import { CreateProductInput } from '../../inputs/create-product.input';
 import { PubSub } from 'apollo-server';
 import { nameof } from "ts-simple-nameof";
 import { UseInterceptors } from '@nestjs/common';
+import { LogService } from '@shared/logging/log.service';
 
 @Resolver(of => ProductType)
 export class ProductResolver {
-    constructor(private readonly productService: ProductsService, private readonly pubSub: PubSub) { }
+    constructor(private readonly productService: ProductsService, private readonly pubSub: PubSub, private readonly logger: LogService) { }
 
     @Query(returns => ProductType)
     async product(@Args("id") id: string): Promise<ProductType> {

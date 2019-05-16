@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "ts-node-dev -r tsconfig-paths/register --respawn --ignore-watch node_modules --debug --inspect-brk=9229 src/main.ts",
+    "start": "nodemon",
+    "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rimraf dist && npm run build",
     "start:prod": "node dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -62,7 +63,6 @@
     "supertest": "^3.4.1",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
-    "ts-node-dev": "^1.0.0-pre.39",
     "tslint": "5.12.1",
     "typescript": "^3.4.3"
   },

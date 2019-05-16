@@ -12,9 +12,11 @@ import { List } from "linqts-camelcase";
 import { ResponseLoggingInterceptor } from './logging.interceptor';
 import { HttpAdapterHost, NestContainer, ModuleRef, AbstractHttpAdapter } from '@nestjs/core';
 import { ServerResponse } from 'http';
+import { toArray } from '@shared/helpers';
+import stream = require('stream');
 
-// declare module "@nestjs/core" { 
-//     interface ModuleRef { 
+// declare module "@nestjs/core" {
+//     interface ModuleRef {
 //         container: NestContainer;
 //     }
 // }
@@ -24,98 +26,97 @@ const logDirectory = path.resolve(`${path.parse(process.mainModule.filename).dir
 if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
 }
+function buildTransportOption(level: LogLevel) {
+    return {
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        level,
+        filename: path.resolve(logDirectory, `%DATE%-${level}.log`),
+        handleExceptions: true,
+        json: true,
+        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
+    } as winstonDailyRotateFile.DailyRotateFileTransportOptions;
+}
 
-const files = {
-    info: {
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        level: "info",
-        filename: path.resolve(logDirectory, "%DATE%-info.log"),
-        handleExceptions: true,
-        json: true,
-        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-    } as winstonDailyRotateFile.DailyRotateFileTransportOptions,
-    debug: {
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        level: "debug",
-        filename: path.resolve(logDirectory, "%DATE%-debug.log"),
-        handleExceptions: true,
-        json: true,
-        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-    } as winstonDailyRotateFile.DailyRotateFileTransportOptions,
-    warn: {
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        level: "warn",
-        filename: path.resolve(logDirectory, "%DATE%-warn.log"),
-        handleExceptions: true,
-        json: true,
-        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-    } as winstonDailyRotateFile.DailyRotateFileTransportOptions,
-    error: {
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        level: "error",
-        filename: path.resolve(logDirectory, "%DATE%-error.log"),
-        handleExceptions: true,
-        json: true,
-        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-    } as winstonDailyRotateFile.DailyRotateFileTransportOptions,
-    crit: {
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        level: "crit",
-        filename: path.resolve(logDirectory, "%DATE%-crit.log"),
-        handleExceptions: true,
-        json: true,
-        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-    } as winstonDailyRotateFile.DailyRotateFileTransportOptions,
-};
+export enum LogLevel {
+    error = "error",
+    warn = "warn",
+    info = "info",
+    verbose = "verbose",
+    debug = "debug",
+    silly = "silly",
+}
 
-export type LogLevel = keyof typeof files;
-export type LogOptions = { enabledLevels: LogLevel[], enableResponseLogging: boolean };
+// tslint:disable-next-line: no-namespace
+declare module "./log.module" {
+    export namespace LogLevel {
+        function toArray(this): LogLevel[];
 
-const LogOptionsInjectToken = "LogOptions";
+    }
+}
+LogLevel.toArray = toArray;
+export function isTransports(obj: any): obj is { transports: stream.Writable | stream.Writable[]; enableResponseLogging: boolean; } {
+    return Object.keys(obj).includes("transports");
+}
 
-let logger: LogService;
+
+export type LogOptions = { levels: LogLevel[]; enableResponseLogging: boolean; } | { transports: stream.Writable | stream.Writable[]; enableResponseLogging: boolean; };
+
+export const LogOptionsInjectToken = "LogOptions";
+
+let logService: LogService;
 
 @Module({})
 export class LogModule implements OnModuleInit {
+    static winstonInstance: any;
     onModuleInit() {
-        if (this.logOptions.enableResponseLogging) {
-            this.moduleRef["container"].applicationConfig.addGlobalInterceptor(new ResponseLoggingInterceptor(logger));
-        }
+        // tslint:disable-next-line: no-string-literal
+        this.moduleRef["container"].applicationConfig.addGlobalInterceptor(this.moduleRef.get(ResponseLoggingInterceptor));
     }
 
     /**
      *
      */
-    constructor(private readonly moduleRef: ModuleRef,
-        @Inject(LogOptionsInjectToken) private readonly logOptions: LogOptions) {
+    constructor(private readonly moduleRef: ModuleRef) {
 
     }
     static forRoot(logOptions: LogOptions): DynamicModule {
-        const transports = new List(logOptions.enabledLevels).distinct().select(x => new winstonDailyRotateFile(files[x])).toArray();
-        logger = new LogService({
-            transports: [
-                ...transports,
-                new winston.transports.Console({
-                    format: winston.format.combine(winston.format.colorize(), winston.format.timestamp(), winston.format.simple()),
-                }),
-            ],
-        });
-        return {
-            module: LogModule,
-            providers: [{ provide: LogService, useValue: logger }, { provide: LogOptionsInjectToken, useValue: logOptions }],
-            exports: [{ provide: LogService, useValue: logger }],
+        if (!isTransports(logOptions)) {
+            const transports = new List(logOptions.levels).distinct().select(x => new winstonDailyRotateFile(buildTransportOption(x))).toArray();
+            transports.push(new winston.transports.Console({
+                format: winston.format.combine(winston.format.colorize(), winston.format.timestamp(), winston.format.cli()),
+                level: "debug",
+            }) as any);
+            transports.toList().forEach(x => winston.add(x));
+            logService = new LogService();
+            return {
+                module: LogModule,
+                providers: [{ provide: LogService, useValue: logService },
+                { provide: LogOptionsInjectToken, useValue: logOptions },
+                {
+                    provide: ResponseLoggingInterceptor, useValue: new ResponseLoggingInterceptor(logService, logOptions),
+                }],
+                exports: [{ provide: LogService, useValue: logService }],
 
-        };
+            };
+        } else {
+            winston.configure({
+                transports: logOptions as any,
+            });
+            logService = new LogService();
+            return {
+                module: LogModule,
+                providers: [{ provide: LogService, useValue: logService },
+                { provide: LogOptionsInjectToken, useValue: logOptions },
+                {
+                    provide: ResponseLoggingInterceptor, useValue: new ResponseLoggingInterceptor(logService, logOptions),
+                }],
+                exports: [{ provide: LogService, useValue: logService }],
+
+            };
+        }
+
     }
 
 }

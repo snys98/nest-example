@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="32无效" alt="Nest Logo" /></a>
 </p>
 
 [travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
@@ -69,7 +69,7 @@ $ npm run test:cov
 - Logging
   - [x] AOP Logging
   - [x] Configurable Response Logging
-  - [ ] Injected Logger
+  - [x] Injected Logger
 - [ ] AOP Error Handling
 - [x] MongoDB Integration
 - Authentication
