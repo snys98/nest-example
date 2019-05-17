@@ -28,7 +28,8 @@
         "object-literal-sort-keys": false,
         "prefer-const": false,
         "align": false,
-        "no-consecutive-blank-lines":false
+        "no-consecutive-blank-lines": false,
+        "no-string-literal": false
     },
     "rulesDirectory": []
 }

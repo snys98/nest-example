@@ -8,12 +8,13 @@ import { PubSub } from 'apollo-server';
 import { nameof } from 'ts-simple-nameof';
 import { Product } from './models/product.model';
 import { SharedModule } from '@shared/shared.module';
+import { CatsController } from './temp/temp.controller';
 
 
 const SERVICES = [ProductsService];
 const RESOLVERS = [ProductResolver];
 const MODEL_SCHEMAS = [{ name: nameof(Product), schema: ProductSchema }];
-const THIRD_DEPS = [PubSub];
+const THIRD_DEPS = [PubSub, CatsController];
 
 @Module({
     imports: [

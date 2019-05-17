@@ -1,5 +1,5 @@
 import { Module, DynamicModule, OnModuleInit, Inject, INestApplication, OnApplicationBootstrap } from '@nestjs/common';
-import { LogService } from './log.service';
+import { LoggingService } from '@shared/logging/logging.service';
 import * as path from "path";
 import { WinstonModule } from "nest-winston";
 import * as fs from 'fs';
@@ -9,12 +9,11 @@ import { FileTransportOptions } from 'winston/lib/winston/transports';
 import * as winstonDailyRotateFile from "winston-daily-rotate-file";
 import * as JSON from "JSON5";
 import { List } from "linqts-camelcase";
-import { ResponseLoggingInterceptor } from './logging.interceptor';
+import { LoggingInterceptor } from '@shared/logging/logging.interceptor';
 import { HttpAdapterHost, NestContainer, ModuleRef, AbstractHttpAdapter } from '@nestjs/core';
 import { ServerResponse } from 'http';
-import { toArray } from '@shared/helpers';
 import stream = require('stream');
-
+import { toMemberArray } from 'src/global';
 // declare module "@nestjs/core" {
 //     interface ModuleRef {
 //         container: NestContainer;
@@ -49,13 +48,13 @@ export enum LogLevel {
 }
 
 // tslint:disable-next-line: no-namespace
-declare module "./log.module" {
+declare module "./logging.module" {
     export namespace LogLevel {
-        function toArray(this): LogLevel[];
+        function toMemberArray(this): LogLevel[];
 
     }
 }
-LogLevel.toArray = toArray;
+LogLevel.toMemberArray = toMemberArray;
 export function isTransports(obj: any): obj is { transports: stream.Writable | stream.Writable[]; enableResponseLogging: boolean; } {
     return Object.keys(obj).includes("transports");
 }
@@ -65,14 +64,14 @@ export type LogOptions = { levels: LogLevel[]; enableResponseLogging: boolean; }
 
 export const LogOptionsInjectToken = "LogOptions";
 
-let logService: LogService;
+let logService: LoggingService;
 
 @Module({})
 export class LogModule implements OnModuleInit {
     static winstonInstance: any;
     onModuleInit() {
         // tslint:disable-next-line: no-string-literal
-        this.moduleRef["container"].applicationConfig.addGlobalInterceptor(this.moduleRef.get(ResponseLoggingInterceptor));
+        this.moduleRef["container"].applicationConfig.addGlobalInterceptor(this.moduleRef.get(LoggingInterceptor));
     }
 
     /**
@@ -89,30 +88,30 @@ export class LogModule implements OnModuleInit {
                 level: "debug",
             }) as any);
             transports.toList().forEach(x => winston.add(x));
-            logService = new LogService();
+            logService = new LoggingService();
             return {
                 module: LogModule,
-                providers: [{ provide: LogService, useValue: logService },
+                providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {
-                    provide: ResponseLoggingInterceptor, useValue: new ResponseLoggingInterceptor(logService, logOptions),
+                    provide: LoggingInterceptor, useValue: new LoggingInterceptor(logService, logOptions),
                 }],
-                exports: [{ provide: LogService, useValue: logService }],
+                exports: [{ provide: LoggingService, useValue: logService }],
 
             };
         } else {
             winston.configure({
                 transports: logOptions as any,
             });
-            logService = new LogService();
+            logService = new LoggingService();
             return {
                 module: LogModule,
-                providers: [{ provide: LogService, useValue: logService },
+                providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {
-                    provide: ResponseLoggingInterceptor, useValue: new ResponseLoggingInterceptor(logService, logOptions),
+                    provide: LoggingInterceptor, useValue: new LoggingInterceptor(logService, logOptions),
                 }],
-                exports: [{ provide: LogService, useValue: logService }],
+                exports: [{ provide: LoggingService, useValue: logService }],
 
             };
         }

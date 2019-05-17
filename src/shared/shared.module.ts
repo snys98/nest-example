@@ -1,9 +1,16 @@
-import { Module, Global, DynamicModule } from '@nestjs/common';
-import { LogService } from '@shared/logging/log.service';
-import { LogModule, LogLevel, LogOptions } from './logging/log.module';
+import { Module, Global, DynamicModule, ArgumentsHost } from '@nestjs/common';
+import { LoggingService } from '@shared/logging/logging.service';
+import { LogModule, LogLevel, LogOptions } from '@shared/logging/logging.module';
 import winston = require('winston');
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { IncomingMessage, ServerResponse } from 'http';
+
+
+// tslint:disable-next-line: max-classes-per-file
 @Global()
-@Module({})
+@Module({
+  imports: []
+})
 export class SharedModule {
     static forRoot(logOptions: LogOptions): DynamicModule {
         return {

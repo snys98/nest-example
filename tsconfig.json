@@ -7,7 +7,8 @@
             "jest"
         ],
         "typeRoots": [
-            "node_modules/@types"
+            "node_modules/@types",
+            "src"
         ],
         "removeComments": true,
         "emitDecoratorMetadata": true,
@@ -26,6 +27,7 @@
         }
     },
     "exclude": [
+        "client",
         "node_modules",
         "dist",
         "lib.dom.d.ts"

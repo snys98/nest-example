@@ -3,7 +3,7 @@ import { AngularModule } from './angular/angular.module';
 import { ApplicationModule } from './application/application.module';
 import { SharedModule } from '@shared/shared.module';
 import * as path from "path";
-import { LogLevel } from '@shared/logging/log.module';
+import { LogLevel } from '@shared/logging/logging.module';
 
 @Module({
     imports: [
@@ -12,7 +12,7 @@ import { LogLevel } from '@shared/logging/log.module';
             rootPath: path.resolve("client/dist"),
             renderPath: "/app/*",
         }),
-        SharedModule.forRoot({ levels: LogLevel.toArray(), enableResponseLogging: true }),
+        SharedModule.forRoot({ levels: LogLevel.toMemberArray(), enableResponseLogging: true }),
     ],
     providers: [],
     controllers: [],
