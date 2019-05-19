@@ -70,7 +70,7 @@ $ npm run test:cov
   - [x] AOP Logging
   - [x] Configurable Response Logging
   - [x] Injected Logger
-- [ ] AOP Error Handling
+- [x] AOP Error Handling
 - [x] MongoDB Integration
 - Authentication
   - [ ] Role Based Access Control

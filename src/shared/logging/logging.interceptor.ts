@@ -7,6 +7,7 @@ import { LoggingService } from '@shared/logging/logging.service';
 import { LogOptions, LogOptionsInjectToken } from '@shared/logging/logging.module';
 import * as expressWinston from "express-winston";
 import { Request, Handler } from 'express';
+import winston = require('winston');
 
 const requestMeta = expressWinston.requestWhitelist.concat("body");
 const responseMeta = expressWinston.responseWhitelist;
@@ -48,8 +49,8 @@ export class LoggingInterceptor implements NestInterceptor {
             err => {
                 let elapsedTime = Date.now() - now;
                 requestMeta.forEach(x => content.req[x] = request[x]);
-                content.error = err.stack;
                 content.elapsedTime = elapsedTime;
+                Object.assign(content, winston.exceptions.getAllInfo(err));
                 this.logger.error(content);
             },
             // () => console.log('HTTP request completed.')

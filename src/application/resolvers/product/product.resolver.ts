@@ -5,15 +5,18 @@ import { PageInput } from '../../inputs/common-args/page.input';
 import { CreateProductInput } from '../../inputs/create-product.input';
 import { PubSub } from 'apollo-server';
 import { nameof } from "ts-simple-nameof";
-import { UseInterceptors, Catch } from '@nestjs/common';
+import { UseInterceptors, Catch, InternalServerErrorException, UseFilters } from '@nestjs/common';
 import { LoggingService } from '@shared/logging/logging.service';
+import { UserFriendlyExceptionFilter } from '@shared/exception-filter/user-friendly-exception.filter';
 
+@UseFilters(UserFriendlyExceptionFilter)
 @Resolver(of => ProductType)
 export class ProductResolver {
     constructor(private readonly productService: ProductsService, private readonly pubSub: PubSub, private readonly logger: LoggingService) { }
 
     @Query(returns => ProductType)
     async product(@Args("id") id: string): Promise<ProductType> {
+        throw new InternalServerErrorException("test");
         let product = await this.productService.find(id);
         return new ProductType(product);
     }
