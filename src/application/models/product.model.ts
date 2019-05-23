@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, Schema } from "mongoose";
 import { nameof } from "ts-simple-nameof";
 // import { applyMixins } from "@shared/helpers";
 export interface Product extends Document {
@@ -10,4 +10,11 @@ export class Product {
 
 }
 
-// applyMixins(Document, [Model]);
+export const ProductSchema = new Schema<Product>({
+    price: String,
+    name: String,
+    createdAt: Date,
+}, {
+        timestamps: { createdAt: true, updatedAt: true },
+    });
+

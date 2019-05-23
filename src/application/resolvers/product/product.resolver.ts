@@ -1,27 +1,28 @@
 import { Resolver, Query, Args, Mutation, Subscription } from '@nestjs/graphql';
 import { ProductType } from '../../types/product.type';
-import { ProductsService } from '../../services/product.service';
+import { ProductService } from '../../services/product.service';
 import { PageInput } from '../../inputs/common-args/page.input';
 import { CreateProductInput } from '../../inputs/create-product.input';
 import { PubSub } from 'apollo-server';
 import { nameof } from "ts-simple-nameof";
-import { UseInterceptors, Catch, InternalServerErrorException, UseFilters } from '@nestjs/common';
+import { UseInterceptors, Catch, InternalServerErrorException, UseFilters, UseGuards } from '@nestjs/common';
 import { LoggingService } from '@shared/logging/logging.service';
 import { UserFriendlyExceptionFilter } from '@shared/exception-filter/user-friendly-exception.filter';
+import { GqlAuthGuard } from '@shared/auth/auth.guard';
 
 @UseFilters(UserFriendlyExceptionFilter)
 @Resolver(of => ProductType)
 export class ProductResolver {
-    constructor(private readonly productService: ProductsService, private readonly pubSub: PubSub, private readonly logger: LoggingService) { }
+    constructor(private readonly productService: ProductService, private readonly pubSub: PubSub, private readonly logger: LoggingService) { }
 
     @Query(returns => ProductType)
     async product(@Args("id") id: string): Promise<ProductType> {
-        throw new InternalServerErrorException("test");
         let product = await this.productService.find(id);
         return new ProductType(product);
     }
 
     @Query(returns => [ProductType])
+    @UseGuards(GqlAuthGuard)
     async products(@Args() input: PageInput): Promise<ProductType[]> {
         let products = await this.productService.findByPage(input);
         return products.map(x => new ProductType(x));

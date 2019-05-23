@@ -4,6 +4,12 @@ import { ModuleRef } from '@nestjs/core';
 import { LoggingService } from '@shared/logging/logging.service';
 
 @Module({
-    providers: [UserFriendlyExceptionFilter]
+    providers: [UserFriendlyExceptionFilter, {
+        provide: LoggingService,
+        useFactory: (moduleRef: ModuleRef) => {
+            return moduleRef.get(LoggingService);
+        },
+        inject: [ModuleRef],
+    }]
 })
 export class ExceptionFilterModule { }
