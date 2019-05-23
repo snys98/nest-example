@@ -67,7 +67,7 @@ export const LogOptionsInjectToken = "LogOptions";
 let logService: LoggingService;
 
 @Module({})
-export class LogModule implements OnModuleInit {
+export class LoggingModule implements OnModuleInit {
     static winstonInstance: any;
     onModuleInit() {
         // tslint:disable-next-line: no-string-literal
@@ -90,7 +90,7 @@ export class LogModule implements OnModuleInit {
             transports.toList().forEach(x => winston.add(x));
             logService = new LoggingService();
             return {
-                module: LogModule,
+                module: LoggingModule,
                 providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {
@@ -105,7 +105,7 @@ export class LogModule implements OnModuleInit {
             });
             logService = new LoggingService();
             return {
-                module: LogModule,
+                module: LoggingModule,
                 providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {

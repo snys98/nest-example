@@ -12,8 +12,7 @@ export class UserFriendlyExceptionFilter implements GqlExceptionFilter {
 
     }
     catch(exception: HttpException, host: ArgumentsHost) {
-        const gqlHost = GqlArgumentsHost.create(host);
-        this.loggingService.warn(gqlHost);
+        this.loggingService.warn(exception);
         return exception;
     }
 }

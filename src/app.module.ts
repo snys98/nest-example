@@ -7,12 +7,12 @@ import { LogLevel } from '@shared/logging/logging.module';
 
 @Module({
     imports: [
-        ApplicationModule,
         AngularModule.forRoot({
             rootPath: path.resolve("client/dist"),
             renderPath: "/app/*",
         }),
         SharedModule.forRoot({ levels: LogLevel.toMemberArray(), enableResponseLogging: true }),
+        ApplicationModule,
     ],
     providers: [],
     controllers: [],

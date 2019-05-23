@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Product } from '../models/product.model';
 
 @Injectable()
-export class ProductsService {
+export class ProductService {
     async addNew(data: Partial<Product>): Promise<Product> {
         let product = new this.productModel(data);
         product = await product.save();

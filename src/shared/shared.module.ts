@@ -1,23 +1,27 @@
 import { Module, Global, DynamicModule, ArgumentsHost } from '@nestjs/common';
 import { LoggingService } from '@shared/logging/logging.service';
-import { LogModule, LogLevel, LogOptions } from '@shared/logging/logging.module';
+import { LogLevel, LogOptions, LoggingModule } from '@shared/logging/logging.module';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IncomingMessage, ServerResponse } from 'http';
 import { ExceptionFilterModule } from './exception-filter/exception-filter.module';
+import { AuthModule } from './auth/auth.module';
 import winston = require('winston');
+import { UserFriendlyExceptionFilter } from './exception-filter/user-friendly-exception.filter';
+import { LocalStrategy } from './auth/http.strategy';
+import { LoggingInterceptor } from './logging/logging.interceptor';
 
 
 // tslint:disable-next-line: max-classes-per-file
-@Global()
 @Module({
-  imports: [ExceptionFilterModule]
+    imports: []
 })
 export class SharedModule {
     static forRoot(logOptions: LogOptions): DynamicModule {
         return {
-            imports: [LogModule.forRoot(logOptions)],
+            imports: [LoggingModule.forRoot(logOptions), AuthModule.forRoot(), ExceptionFilterModule],
+            providers: [LoggingService, UserFriendlyExceptionFilter, LocalStrategy, LoggingInterceptor],
             module: SharedModule,
-            exports: [LogModule]
+            exports: [LoggingModule, AuthModule, ExceptionFilterModule]
         };
     }
 }
