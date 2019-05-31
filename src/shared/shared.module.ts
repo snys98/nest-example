@@ -9,6 +9,9 @@ import winston = require('winston');
 import { UserFriendlyExceptionFilter } from './exception-filter/user-friendly-exception.filter';
 import { LocalStrategy } from './auth/http.strategy';
 import { LoggingInterceptor } from './logging/logging.interceptor';
+import { MongooseModule } from '@nestjs/mongoose';
+import { nameof } from 'ts-simple-nameof';
+import { User, UserSchema } from './auth/user.base';
 
 
 // tslint:disable-next-line: max-classes-per-file
@@ -18,8 +21,10 @@ import { LoggingInterceptor } from './logging/logging.interceptor';
 export class SharedModule {
     static forRoot(logOptions: LogOptions): DynamicModule {
         return {
-            imports: [LoggingModule.forRoot(logOptions), AuthModule.forRoot(), ExceptionFilterModule],
-            providers: [LoggingService, UserFriendlyExceptionFilter, LocalStrategy, LoggingInterceptor],
+            imports: [LoggingModule.forRoot(logOptions), AuthModule.forRoot(), ExceptionFilterModule,
+            MongooseModule.forRoot('mongodb://root:snys19931103@localhost/db'),
+            MongooseModule.forFeature([{ name: nameof(User), schema: UserSchema }]),],
+            providers: [LoggingService, UserFriendlyExceptionFilter, LocalStrategy],
             module: SharedModule,
             exports: [LoggingModule, AuthModule, ExceptionFilterModule]
         };

@@ -9,9 +9,11 @@ import { Product, ProductSchema } from './models/product.model';
 import { SharedModule } from '@shared/shared.module';
 import { CatsController } from './temp/temp.controller';
 import { User, UserSchema } from '@shared/auth/user.base';
+import { LoggingService } from '@shared/logging/logging.service';
+import { LogOptionsInjectToken } from '@shared/logging/logging.module';
 
 
-const SERVICES = [ProductService];
+const SERVICES = [ProductService, LoggingService];
 const RESOLVERS = [ProductResolver];
 const MODEL_SCHEMAS = [{ name: nameof(Product), schema: ProductSchema },
 { name: nameof(User), schema: UserSchema }];

@@ -94,9 +94,11 @@ export class LoggingModule implements OnModuleInit {
                 providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {
-                    provide: LoggingInterceptor, useValue: new LoggingInterceptor(logService, logOptions),
+                    provide: LoggingInterceptor, useFactory: () => {
+                        new LoggingInterceptor(logService, logOptions)
+                    },
                 }],
-                exports: [{ provide: LoggingService, useValue: logService }],
+                exports: [{ provide: LoggingService, useValue: logService }, LoggingInterceptor],
 
             };
         } else {
@@ -109,9 +111,11 @@ export class LoggingModule implements OnModuleInit {
                 providers: [{ provide: LoggingService, useValue: logService },
                 { provide: LogOptionsInjectToken, useValue: logOptions },
                 {
-                    provide: LoggingInterceptor, useValue: new LoggingInterceptor(logService, logOptions),
+                    provide: LoggingInterceptor, useFactory: () => {
+                        new LoggingInterceptor(logService, logOptions)
+                    },
                 }],
-                exports: [{ provide: LoggingService, useValue: logService }],
+                exports: [{ provide: LoggingService, useValue: logService }, LoggingInterceptor],
 
             };
         }
