@@ -41,7 +41,7 @@
     "json5": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "linqts-camelcase": "^1.12.4",
-    "mongoose": "^5.5.11",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "nest-winston": "^1.0.4",
     "nestjs-exceptions": "^1.0.3",
